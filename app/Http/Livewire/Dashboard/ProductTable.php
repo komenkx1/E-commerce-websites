@@ -4,13 +4,14 @@ namespace App\Http\Livewire\Dashboard;
 
 use App\Models\Product;
 use App\Models\ProductImage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\Http\Livewire\LivewireDatatable;
 
 class ProductTable extends LivewireDatatable
 {
-    public $model = Product::class;
+
     protected $listeners = [
         'removeProduct',
     ];
@@ -33,7 +34,15 @@ class ProductTable extends LivewireDatatable
                 ->unsortable(),
         ];
     }
+    public function builder()
+    {
+        if (Auth::user()->hasRole('seller')) {
+            return Product::where('store_id',Auth::user()->store->id);
+        }else {
+            return Product::query();
 
+        }
+    }
     public function confirmDel($id)
     {
         $this->confirm('Are You Sure To Delete This Data?', [

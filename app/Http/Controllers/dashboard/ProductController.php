@@ -8,6 +8,7 @@ use App\Models\ProductColor;
 use App\Models\ProductImage;
 use App\Models\ProductSize;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -61,26 +62,32 @@ class ProductController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         } else {
+            if (Auth::user()->store?->id) {
+                $newProduct =  Product::create([
+                    'name' => $request->name,
+                    'store_id' => Auth::user()->store->id,
+                    'slug' => Str::slug($request->name,),
+                    'description' => $request->description,
+                    'price' => $request->price,
+                    'product_rate' => $request->product_rate,
+                    'stock' => $request->stock,
+                    'weight' => $request->weight,
+                    'kondisi' => $request->kondisi,
+                    'status' => $request->status ? 'publish' : 'draft',
+                ]);
+    
+    
+                $this->addMultipleVariant($request->file('files'), new ProductImage(), 'image', $newProduct, 'attach');
+                $this->addMultipleVariant($request->category, new Category(), 'category', $newProduct, 'attach');
+                $this->addMultipleVariant($request->size, new ProductSize(), 'size', $newProduct, 'attach');
+                $this->addMultipleVariant($request->color, new ProductColor(), 'color', $newProduct, 'attach');
+            return redirect()->route('dashboard.product.index')->with('success', 'Product Created.');
 
-            $newProduct =  Product::create([
-                'name' => $request->name,
-                'slug' => Str::slug($request->name,),
-                'description' => $request->description,
-                'price' => $request->price,
-                'product_rate' => $request->product_rate,
-                'stock' => $request->stock,
-                'weight' => $request->weight,
-                'kondisi' => $request->kondisi,
-                'status' => $request->status ? 'publish' : 'draft',
-            ]);
+            }else {
+                return redirect()->route('dashboard.product.index')->with('info', 'Please Regist Your Store!');
+            }
+        
 
-
-            $this->addMultipleVariant($request->file('files'), new ProductImage(), 'image', $newProduct, 'attach');
-            $this->addMultipleVariant($request->category, new Category(), 'category', $newProduct, 'attach');
-            $this->addMultipleVariant($request->size, new ProductSize(), 'size', $newProduct, 'attach');
-            $this->addMultipleVariant($request->color, new ProductColor(), 'color', $newProduct, 'attach');
-
-            return redirect()->route('dashboard.product.index')->with('success', 'Product Berhasil Diupdate.');
 
         }
     }

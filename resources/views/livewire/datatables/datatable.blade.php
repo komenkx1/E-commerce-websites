@@ -56,7 +56,7 @@
                         </button>
                     </div>
                 @endif
-                @if ($addable)
+                @if ($addable && Auth::user()->hasRole('seller'))
                 @if ($addable != 'modal')
                     <a href="{{ $addable }}"
                         class=" p-2 space-x-2 px-3 border border-green-400 rounded-md bg-green-500 text-white text-xs leading-4 font-medium uppercase tracking-wider hover:bg-green-200 focus:outline-none">
