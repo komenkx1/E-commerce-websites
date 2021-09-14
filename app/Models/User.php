@@ -65,6 +65,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
      public function getPhotoProfileAttribute()
      {
-         return '/storage/img/'.$this->photo_path;
+         return $this->photo_path ? '/storage/img/'.$this->photo_path : 'https://www.pikpng.com/pngl/m/326-3261783_person-icon-default-user-image-jpg-clipart.png';
      }
 }

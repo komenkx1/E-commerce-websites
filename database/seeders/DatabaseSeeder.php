@@ -10,14 +10,13 @@ class DatabaseSeeder extends Seeder
     {
         \App\Models\User::factory()->create([
             'email' => 'user@example.com',
-            'province_id'=>null,
-            'city_id'=>null,
         ]);
 
         \App\Models\User::factory(100)->create();
 
         $this->call([
             RoleSeeder::class,
+            SuperUserSeeder::class,
         ]);
     }
 }

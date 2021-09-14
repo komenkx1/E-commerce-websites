@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Dashboard\CategoryController;
+use App\Http\Controllers\Dashboard\CourierController;
 use App\Http\Controllers\Dashboard\DiscountController;
 use App\Http\Controllers\Dashboard\ProductController;
+use App\Http\Controllers\dashboard\SellerVerificationController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
@@ -32,14 +35,12 @@ Route::group([
     'prefix' => 'dashboard',
     'as' => 'dashboard.',
 ], function () {
-    Route::get('dashboard', function ($id) {
-        return view('dashboard.dashboard');
-    })->name('dashboard');
-
+    Route::view('/', 'dashboard/index')->name('dashboard');
     Route::resource('product', ProductController::class)->except('destroy', 'show');
-    Route::resource('category', ProductController::class)->only('store', 'index');
-    Route::resource('courier', ProductController::class)->except('destroy', 'show');
-    Route::resource('discount', ProductController::class)->except('destroy', 'show', 'create');
+    Route::resource('category', CategoryController::class)->only('store', 'index');
+    Route::resource('courier', CourierController::class)->except('destroy', 'show');
+    Route::resource('discount', DiscountController::class)->except('destroy', 'create');
+    Route::resource('seller-verification', SellerVerificationController::class)->only('index');
 
     //custom url create discount
     Route::get('/discount/create/{id}', [DiscountController::class, 'create'])->name('discount.create');

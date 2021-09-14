@@ -24,8 +24,6 @@ class CreateUserTable extends Migration
             $table->enum('sex',['male','female','custom'])->default('custom');
             $table->string('phone_number', 15)->nullable();
             $table->string('timezone')->nullable();
-            $table->foreignId('province_id')->nullable()->constrained('ro_province')->onDelete('cascade');
-            $table->foreignId('city_id')->nullable()->constrained('ro_city')->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
         });
