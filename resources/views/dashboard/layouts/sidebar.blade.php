@@ -71,7 +71,21 @@
                 </a>
             </li>
 
-
+            <li class="separator">
+                <span>Account Management</span>
+            </li>
+            <li>
+                <a href="{{ Route('dashboard.courier.index') }}" class="@if (Route::is('dashboard.seller-verification.*')) active @endif">
+                    <span class="icon material-icons">people</span>
+                    <span class="text">Verification Seller</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ Route('dashboard.courier.index') }}" class="@if (Route::is('dashboard.courier.*')) active @endif">
+                    <span class="icon material-icons">key</span>
+                    <span class="text">Role Access</span>
+                </a>
+            </li>
             <li class="separator">
                 <span>UI Elements & Components</span>
             </li>

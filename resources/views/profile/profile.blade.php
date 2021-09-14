@@ -80,7 +80,7 @@
                             @elseif (Auth::user()->store?->status == 'verified')
                             <span class="badge bg-primary">Verified</span>
                             @elseif (Auth::user()->store?->status == 'rejected')
-                            <span class="badge bg-danger">Rejected</span>
+                            <span class="badge bg-danger">Rejected</span><span> <small><a href="#" id="btnReason" >Click here For Reason</a> </small> </span>
                             @else
                             <span class="badge bg-dark">Not Registered</span>
                             @endif  
@@ -165,10 +165,32 @@
       </div>
     </div>
   </div>
+@if (Auth::user()->store?->status == 'rejected')
+<div class="modal fade" id="modalReason" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Reason Rejected</h4>
+          <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="fs-sm">{{ Auth::user()->store->reason_to_reject }}</p>
+        </div>
+        <div class="modal-footer">
+
+          <button class="btn btn-secondary btn-sm" type="button" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+@endif
+ 
 @endsection
 @section('scripts')
     <script>
-
+        $('#btnReason').click(function(){
+            $('#modalReason').modal('show');
+        })
         $('#btnUserDelete').click(function(){
             var id = $(this).data('id');
             var url = '/profile/setting/'+id;

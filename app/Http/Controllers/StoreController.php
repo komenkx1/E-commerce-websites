@@ -85,16 +85,22 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        $stores = $request->all();
         $bankItem = Bank::updateOrCreate([
             'name' => $request->bank_id
         ]);
 
-        $store->update([
-            'name' => $request->name,
-            'bank_id' => $bankItem->id,
-            'description' => $request->description,
-            'rekening_number' => $request->rekening_number
-        ]);
+        
+        $stores['bank_id'] = $bankItem->id;
+
+        if ($store->status == 'rejected') {
+            $stores['status'] = 'pending';
+            $store->update($stores);
+        }else {
+               $store->update($stores);
+        }
+
+       
 
         return redirect()->back()->with('success','Store data updated.');
     }
